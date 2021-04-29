@@ -103,6 +103,18 @@ const config = {
           process.env.GOOGLE_AUTH_REDIRECT_URL_LOGIN || fatal('No GOOGLE_AUTH_REDIRECT_URL_LOGIN'),
       },
     },
+    FACEBOOK: {
+      CLIENT_ID: process.env.FACEBOOK_AUTH_APP_ID || fatal('No FACEBOOK_AUTH_APP_ID'),
+      CLIENT_SECRET: process.env.FACEBOOK_AUTH_APP_SECRET || fatal('No FACEBOOK_AUTH_APP_SECRET'),
+      REDIRECT_URLS: {
+        REGISTRATION:
+          process.env.FACEBOOK_AUTH_REDIRECT_URL_REGISTRATION ||
+          fatal('No FACEBOOK_AUTH_REDIRECT_URL_REGISTRATION'),
+        LOGIN:
+          process.env.FACEBOOK_AUTH_REDIRECT_URL_LOGIN ||
+          fatal('No FACEBOOK_AUTH_REDIRECT_URL_LOGIN'),
+      },
+    },
   },
   REVIEW: {
     RATING: {

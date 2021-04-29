@@ -1,6 +1,8 @@
+const { FacebookApiException } = require('fb');
+
 const { createUser, updateUser, getUserCredentials } = require('../../../db');
 const { hash, authorizationTokens } = require('../../../utils');
-const { google } = require('../../../lib/api_v1');
+const { google, facebook } = require('../../../lib/api_v1');
 const {
   AUTH: { GOOGLE },
 } = require('../../../config');
@@ -114,6 +116,29 @@ function googleGetAccess(isLogin) {
   };
 }
 
+function facebookGetAccess(isLogin) {
+  return async (ctx, next) => {
+    try {
+      const user = await facebook.getUser(ctx.request.query.code, isLogin);
+
+      ctx.state.payload = {
+        name: user.name,
+        email: user.id,
+        avatar: user.picture.data.url,
+      };
+
+      return next();
+    } catch (err) {
+      if (err.name === FacebookApiException.name) {
+        log.error(err.response, 'Facebook authorization error: ');
+        return ctx.throw(403, err.response.error.message);
+      }
+
+      return ctx.throw(err);
+    }
+  };
+}
+
 async function serviceRegistration(ctx) {
   const { payload } = ctx.state;
 
@@ -158,4 +183,6 @@ module.exports = {
   logout,
   googleRegistration: [googleGetAccess(false), serviceRegistration],
   googleLogin: [googleGetAccess(true), serviceLogin],
+  facebookRegistration: [facebookGetAccess(false), serviceRegistration],
+  facebookLogin: [facebookGetAccess(true), serviceLogin],
 };

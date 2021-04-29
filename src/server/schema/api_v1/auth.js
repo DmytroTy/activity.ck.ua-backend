@@ -52,4 +52,25 @@ const googleLogin = {
     .unknown(),
 };
 
-module.exports = { registration, login, refresh, logout, googleRegistration, googleLogin };
+const facebookRegistration = {
+  query: Joi.object({
+    code: Joi.string(),
+  }).unknown(),
+};
+
+const facebookLogin = {
+  query: Joi.object({
+    code: Joi.string(),
+  }).unknown(),
+};
+
+module.exports = {
+  registration,
+  login,
+  refresh,
+  logout,
+  googleRegistration,
+  googleLogin,
+  facebookRegistration,
+  facebookLogin,
+};
