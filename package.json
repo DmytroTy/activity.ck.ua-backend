@@ -5,7 +5,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
-    "seeds:make": "node src/db/seeds/index.js",
+    "seeds:default": "node src/db/seeds default",
+    "seeds:places": "node src/db/seeds places",
+    "seeds:events": "node src/db/seeds events",
     "eslint": "./node_modules/.bin/eslint ./src/",
     "debug": "npx node-dev@latest --inspect=0.0.0.0:9229 ./src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,7 +32,6 @@
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "dotenv": "^8.2.0",
-    "faker": "^5.4.0",
     "firebase-admin": "^9.5.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
@@ -49,6 +50,7 @@
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
+    "faker": "^5.5.3",
     "prettier": "^2.2.1"
   }
 }

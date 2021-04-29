@@ -33,6 +33,11 @@ const config = {
   errors: {
     DATABASE: 'DatabaseError',
   },
+  places: {
+    schema: {
+      PHONE: /^\+380\d{9}$/,
+    },
+  },
   ROLES: {
     EVERY: 'every',
     USER: 'user',
