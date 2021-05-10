@@ -92,6 +92,13 @@ const config = {
     email: process.env.MODERATOR_EMAIL || fatal('No MODERATOR_EMAIL'),
     password: process.env.MODERATOR_PASSWORD || fatal('No MODERATOR_PASSWORD'),
   },
+  AUTH: {
+    GOOGLE: {
+      CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID || fatal('No GOOGLE_AUTH_CLIENT_ID'),
+      CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET || fatal('No GOOGLE_AUTH_CLIENT_SECRET'),
+      REDIRECT_URL: process.env.GOOGLE_AUTH_REDIRECT_URL || fatal('No GOOGLE_AUTH_REDIRECT_URL'),
+    },
+  },
   REVIEW: {
     RATING: {
       MIN: 1,

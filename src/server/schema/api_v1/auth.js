@@ -34,4 +34,13 @@ const logout = {
   }).unknown(),
 };
 
-module.exports = { registration, login, refresh, logout };
+const google = {
+  query: Joi.object({
+    error: Joi.string(),
+    code: Joi.string(),
+  })
+    .xor('error', 'code')
+    .unknown(),
+};
+
+module.exports = { registration, login, refresh, logout, google };
