@@ -1,4 +1,5 @@
 const {
+  checkUser,
   getUser: getUserDB,
   addVisitedPlace: addVisitedPlaceDB,
   getVisitedPlaces: getVisitedPlacesDB,
@@ -14,6 +15,14 @@ const {
   getExplore: getExploreDB,
 } = require('../../../db');
 const { getPaginationAndUser } = require('./utils');
+
+async function emailFree(ctx) {
+  const { email } = ctx.request.params;
+
+  const isExist = await checkUser(email);
+
+  ctx.status = isExist ? 400 : 200;
+}
 
 async function getUser(ctx) {
   const { id: userId } = ctx.state.authPayload;
@@ -127,6 +136,7 @@ async function getExplore(ctx) {
 }
 
 module.exports = {
+  emailFree,
   getUser,
   addVisitedPlace,
   getVisitedPlaces,
