@@ -170,6 +170,21 @@ module.exports = (client) => {
       }
     },
 
+    getPlacesCount: async () => {
+      try {
+        const res = await client.query(
+          `SELECT category_id, COUNT(*) FROM places
+            WHERE moderated AND deleted_at IS NULL
+            GROUP BY category_id;`,
+        );
+
+        return res.rows;
+      } catch (err) {
+        log.error(err.message || err);
+        throw err;
+      }
+    },
+
     isUserPlace: async (userId, placeId) => {
       try {
         const res = await client.query(

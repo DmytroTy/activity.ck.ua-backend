@@ -84,6 +84,7 @@ module.exports = {
   getPlace: async (id, userId) => funcWrapper(dbWrapper().getPlace)(id, userId),
   getPlaces: async (filters, limit, page) =>
     funcWrapper(dbWrapper().getPlaces)(filters, limit, page),
+  getPlacesCount: async () => funcWrapper(dbWrapper().getPlacesCount)(),
   isUserPlace: async (userId, placeId) => funcWrapper(dbWrapper().isUserPlace)(userId, placeId),
   getUserPlaces: async (userId, limit, page) =>
     funcWrapper(dbWrapper().getUserPlaces)(userId, limit, page),
