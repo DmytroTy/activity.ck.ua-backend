@@ -5,6 +5,7 @@ const fatal = require('../utils/fatalError')(__filename);
 const config = {
   content: {
     EVENTS_PERIOD: '2 week', // This is an INTERVAL type value!
+    TELEGRAM_NUMBER_PER_PAGE: 4,
   },
 
   server: {
@@ -30,6 +31,7 @@ const config = {
       REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET || fatal('No REFRESH_TOKEN_SECRET'),
       REFRESH_TOKEN_LIFE: process.env.REFRESH_TOKEN_LIFE || fatal('No REFRESH_TOKEN_LIFE'),
     },
+    FRONTEND: process.env.FRONTEND_SERVER || fatal('No FRONTEND_SERVER'),
   },
   errors: {
     DATABASE: 'DatabaseError',
@@ -100,6 +102,9 @@ const config = {
       MIN: 1,
       MAX: 5,
     },
+  },
+  telegramBot: {
+    TOKEN: process.env.TELEGRAM_BOT_TOKEN || fatal('No TELEGRAM_BOT_TOKEN'),
   },
 };
 
