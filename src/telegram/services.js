@@ -7,11 +7,11 @@ const {
 } = require('../config');
 const { getCurrentEvents, getEvents, getPlaceEvents, getPlaces } = require('../db');
 
-async function sendCurrentEvents(bot, chatId, limit = TELEGRAM_NUMBER_PER_PAGE, page = 1, filters) {
-  const { events } = await getCurrentEvents(limit, page, filters);
+async function sendCurrentEvents(bot, chatId, page = 1, limit = TELEGRAM_NUMBER_PER_PAGE, filters) {
+  const { events, _totalPages: totalPages } = await getCurrentEvents(limit, page, filters);
 
   if (events.length === 0)
-    return await bot.sendMessage(chatId, `Немає подій, які зараз відбуваються.`);
+    return await bot.sendMessage(chatId, 'Немає подій, які зараз відбуваються.');
 
   for (const event of events) {
     await bot.sendPhoto(chatId, event.main_photo);
@@ -24,13 +24,23 @@ async function sendCurrentEvents(bot, chatId, limit = TELEGRAM_NUMBER_PER_PAGE, 
       }),
     });
   }
+
+  if (page < totalPages) {
+    await bot.sendMessage(chatId, 'Хочете переглянути більше місць?', {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: 'Завантажити більше', callback_data: `/current_events?page=${page + 1}` }],
+        ],
+      }),
+    });
+  }
 }
 
-async function sendEvents(bot, chatId, startTime = Date.now(), limit = TELEGRAM_NUMBER_PER_PAGE, page = 1, filters) {
-  const { events } = await getEvents(startTime, limit, page, filters);
+async function sendEvents(bot, chatId, startTime = Date.now(), page = 1, limit = TELEGRAM_NUMBER_PER_PAGE, filters) {
+  const { events, _totalPages: totalPages } = await getEvents(startTime, limit, page, filters);
 
   if (events.length === 0)
-    return await bot.sendMessage(chatId, `Немає подій, які відватимуться у вибраний період.`);
+    return await bot.sendMessage(chatId, 'Немає подій, які відватимуться у вибраний період.');
 
   for (const event of events) {
     await bot.sendPhoto(chatId, event.main_photo);
@@ -43,13 +53,23 @@ async function sendEvents(bot, chatId, startTime = Date.now(), limit = TELEGRAM_
       }),
     });
   }
+
+  if (page < totalPages) {
+    await bot.sendMessage(chatId, 'Хочете переглянути більше місць?', {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: 'Завантажити більше', callback_data: `${EVENTS}?page=${page + 1}` }],
+        ],
+      }),
+    });
+  }
 }
 
-async function sendPlaces(bot, chatId, filters, limit = TELEGRAM_NUMBER_PER_PAGE, page = 1) {
-  const { places } = await getPlaces(filters, limit, page);
+async function sendPlaces(bot, chatId, filters, page = 1, limit = TELEGRAM_NUMBER_PER_PAGE) {
+  const { places, _totalPages: totalPages } = await getPlaces(filters, limit, page);
 
-  /* if (places.length === 0)
-    return await bot.sendMessage(chatId, `Немає Місць.`); */
+  if (places.length === 0)
+    return await bot.sendMessage(chatId, 'Наразі немає місць в даній категорії.');
 
   for (const place of places) {
     await bot.sendPhoto(chatId, place.main_photo);
@@ -58,10 +78,11 @@ async function sendPlaces(bot, chatId, filters, limit = TELEGRAM_NUMBER_PER_PAGE
       `<b>${place.name}</b>
 рейтинг: ${place.rating}
 адреса: ${place.address}
-телефони: ${place.phones}
+телефон: ${place.phones}
 вебсайт: ${place.website}`, // години роботи: ${place.work_time}
       {
         parse_mode: 'HTML',
+        // disable_web_page_preview: true,
         reply_markup: JSON.stringify({
           inline_keyboard: [
             [{ text: 'Детальніше', url: `${FRONTEND}${PLACES}/${filters.categoryId}/${place.id}` }],
@@ -69,6 +90,16 @@ async function sendPlaces(bot, chatId, filters, limit = TELEGRAM_NUMBER_PER_PAGE
         }),
       },
     );
+  }
+
+  if (page < totalPages) {
+    await bot.sendMessage(chatId, 'Хочете переглянути більше місць?', {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: 'Завантажити більше', callback_data: `${PLACES}/${filters.categoryId}?page=${page + 1}` }],
+        ],
+      }),
+    });
   }
 }
 

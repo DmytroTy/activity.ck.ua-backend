@@ -31,7 +31,7 @@ const config = {
       REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET || fatal('No REFRESH_TOKEN_SECRET'),
       REFRESH_TOKEN_LIFE: process.env.REFRESH_TOKEN_LIFE || fatal('No REFRESH_TOKEN_LIFE'),
     },
-    FRONTEND: 'https://activityckua.web.app',
+    FRONTEND: process.env.FRONTEND_SERVER || fatal('No FRONTEND_SERVER'),
   },
   errors: {
     DATABASE: 'DatabaseError',

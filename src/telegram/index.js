@@ -12,7 +12,6 @@ const commands = [
   { command: '/categories', description: 'Вибрати категорію' },
   { command: '/current_events', description: 'Події які зараз йдуть' },
   { command: '/events', description: 'Події які будуть найближчим часом' },
-  // { command: '/', description: '' },
 ];
 
 const startOptions = {
@@ -47,23 +46,16 @@ const launch = async () => {
 
     switch (text) {
       case '/start':
-        return await bot.sendMessage(chatId, `Вітання від телеграм бота Activityckua. Виберіть дію:`, startOptions);
-        break;
+        return await bot.sendMessage(chatId, 'Вітання від телеграм бота Activityckua. Виберіть дію:', startOptions);
     
       case '/categories':
-        return await bot.sendMessage(chatId, `Виберіть категорію:`, categoriesOptions);
-        break;
+        return await bot.sendMessage(chatId, 'Виберіть категорію:', categoriesOptions);
     
       case '/current_events':
         return await sendCurrentEvents(bot, chatId);
-        break;
     
       case '/events':
         return await sendEvents(bot, chatId);
-        break;
-    
-      default:
-        break;
     }
   });
 
@@ -71,30 +63,24 @@ const launch = async () => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
 
+    let page;
     switch (true) {
-      /* case '/start':
-        return await bot.sendMessage(chatId, `Вітання від телеграм бота  Виберіть дію:`, startOptions);
-        break;
-     */
       case data.startsWith('/categories'):
-        return await bot.sendMessage(chatId, `Виберіть категорію:`, categoriesOptions);
-        break;
+        return await bot.sendMessage(chatId, 'Виберіть категорію:', categoriesOptions);
     
       case data.startsWith('/current_events'):
-        return await sendCurrentEvents(bot, chatId);
-        break;
+        page = data.split('?page=')[1];
+        return await sendCurrentEvents(bot, chatId, page);
     
       case data.startsWith('/events'):
-        return await sendEvents(bot, chatId);
-        break;
+        page = data.split('?page=')[1];
+        return await sendEvents(bot, chatId, undefined, page);
     
       case data.startsWith('/places/'):
-        const categoryId = data.split('/places/')[1];
-        return await sendPlaces(bot, chatId, { categoryId });
-        break;
-    
-      default:
-        break;
+        const filters = data.split('/places/')[1];
+        const categoryId = filters.split('?page=')[0];
+        page = filters.split('?page=')[1];
+        return await sendPlaces(bot, chatId, { categoryId }, page);
     }
   });
 }
