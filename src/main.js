@@ -1,6 +1,7 @@
 const { start, stop } = require('./server');
 const { init, end } = require('./db');
 const { gracefulShutdown } = require('./utils');
+const { launch } = require('./telegram');
 
 const log = require('./utils/logger')(__filename);
 
@@ -15,7 +16,8 @@ async function boot() {
     process.exit(1);
   });
   await init();
-  await start();
+  start();
+  launch();
 }
 
 boot();
